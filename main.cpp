@@ -5,23 +5,18 @@
 //#include <string>
 //#include <vector>
 
+#include "units.h"
+#include "walls.h"
 
 
 int main()
 {
 	int key;
-	int slctP = 0;
-
-	char pSkin[3] = {'A', 'B', 'C'};
-	int pX[3] = {2, 2, 2};
-	int pY[3] = {2, 4, 6};
+	int slctU = 0;
 
 	int moveId = 0;
 	int cTest = 0;
 
-	char wSkin = '#';
-	int wX[10];
-	int wY[10];
 
 
 	if (!initscr())
@@ -38,13 +33,14 @@ int main()
 
 	srand(time(0));
 
+	Units unit[3] =
+	{
+		Units('A', 2, 2),
+		Units('B', 2, 4),
+		Units('C', 2, 6)
+	};
 
-
-    for(int i = 0; i < 10; i++) // Расстановка стен
-    {
-    	wX[i] = 4 + rand() % 15;
-    	wY[i] = 1 + rand() % 40;
-    }
+	Walls wall[20];
 
 
 	while(key != 'q')
@@ -54,13 +50,13 @@ int main()
 /////////////////// Вывод на экран.
 		clear();
 		box(stdscr, 0,0);
-		for(int i = 0; i < 10; i++)
+		for(int i = 0; i < 20; i++)
 		{
-			mvaddch(wX[i], wY[i], wSkin);					
+			wall[i].print();					
 		}
 		for (int i = 0; i < 3; i++)
 		{
-		mvaddch(pX[i], pY[i], pSkin[i]);
+			unit[i].print();
 		}
 		refresh();
 /////////////////
@@ -71,29 +67,29 @@ int main()
 
 		if (key == KEY_DOWN)
 		{
-			pX[slctP]++;
+			unit[slctU].moveX(1);
 			moveId = 1;
 		}
 		if (key == KEY_UP)
 		{
-			pX[slctP]--;
+			unit[slctU].moveX(-1);
 			moveId = 2;
 		}
 		if (key == KEY_RIGHT)
 		{
-			pY[slctP]++;
+			unit[slctU].moveY(1);
 			moveId = 3;
 		}
 		if (key == KEY_LEFT)
 		{
-			pY[slctP]--;
+			unit[slctU].moveY(-1);
 			moveId = 4;
 		}
 		if (key == ' ')
 		{
-			slctP++;
-			if (slctP > 2)
-				slctP = 0;
+			slctU++;
+			if (slctU > 2)
+				slctU = 0;
 		}
 ///////////////////
 
@@ -102,14 +98,18 @@ int main()
 		{
 			cTest = 0;
 
-			if(pX[slctP] > LINES-2 || pX[slctP] < 1 || pY[slctP] > COLS-3 || pY[slctP] < 2)
+			if(	unit[slctU].getX() > LINES-2 
+				|| unit[slctU].getX() < 1 
+				|| unit[slctU].getY() > COLS-2 
+				|| unit[slctU].getY() < 1 )
 			{
 				cTest = 1;
 			}
 			
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 20; i++)
 			{
-				if(pX[slctP] == wX[i] && pY[slctP] == wY[i])
+				if( unit[slctU].getX() == wall[i].getX() 
+					&& unit[slctU].getY() == wall[i].getY() )
 				{
 					cTest = 1;
 					break;
@@ -118,7 +118,8 @@ int main()
 
 			for (int i = 0; i < 3; i++)
 			{
-				if(slctP != i && pX[slctP] == pX[i] && pY[slctP] == pY[i])
+				if(	slctU != i && unit[slctU].getX() == unit[i].getX() 
+					&& unit[slctU].getY() == unit[i].getY() )
 				{
 					cTest = 1;
 					break;
@@ -131,16 +132,16 @@ int main()
 			switch (moveId)
 			{
 				case 1:
-					pX[slctP]--;
+					unit[slctU].moveX(-1);
 					break;
 				case 2:
-					pX[slctP]++;
+					unit[slctU].moveX(1);
 					break;
 				case 3:
-					pY[slctP]--;
+					unit[slctU].moveY(-1);
 					break;
 				case 4:
-					pY[slctP]++;
+					unit[slctU].moveY(1);
 					break;
 			}
 		}
