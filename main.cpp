@@ -10,10 +10,10 @@
 int main()
 {
 	int key;
-	int slct = 0;
+	int slctP = 0;
 
 	char pSkin[3] = {'A', 'B', 'C'};
-	int pX[3] = {2, 4, 6};
+	int pX[3] = {2, 2, 2};
 	int pY[3] = {2, 4, 6};
 
 	int moveId = 0;
@@ -42,8 +42,8 @@ int main()
 
     for(int i = 0; i < 10; i++) // Расстановка стен
     {
-    	wX[i] = 1 + rand() % 20;
-    	wY[i] = 1 + rand() % 20;
+    	wX[i] = 4 + rand() % 15;
+    	wY[i] = 1 + rand() % 40;
     }
 
 
@@ -71,29 +71,29 @@ int main()
 
 		if (key == KEY_DOWN)
 		{
-			pX[slct]++;
+			pX[slctP]++;
 			moveId = 1;
 		}
 		if (key == KEY_UP)
 		{
-			pX[slct]--;
+			pX[slctP]--;
 			moveId = 2;
 		}
 		if (key == KEY_RIGHT)
 		{
-			pY[slct]++;
+			pY[slctP]++;
 			moveId = 3;
 		}
 		if (key == KEY_LEFT)
 		{
-			pY[slct]--;
+			pY[slctP]--;
 			moveId = 4;
 		}
 		if (key == ' ')
 		{
-			slct++;
-			if (slct > 2)
-				slct = 0;
+			slctP++;
+			if (slctP > 2)
+				slctP = 0;
 		}
 ///////////////////
 
@@ -102,14 +102,14 @@ int main()
 		{
 			cTest = 0;
 
-			if(pX[slct] > LINES-2 || pX[slct] < 1 || pY[slct] > COLS-3 || pY[slct] < 2)
+			if(pX[slctP] > LINES-2 || pX[slctP] < 1 || pY[slctP] > COLS-3 || pY[slctP] < 2)
 			{
 				cTest = 1;
 			}
 			
 			for (int i = 0; i < 10; i++)
 			{
-				if(pX[slct] == wX[i] && pY[slct] == wY[i])
+				if(pX[slctP] == wX[i] && pY[slctP] == wY[i])
 				{
 					cTest = 1;
 					break;
@@ -118,7 +118,7 @@ int main()
 
 			for (int i = 0; i < 3; i++)
 			{
-				if(slct != i && pX[slct] == pX[i] && pY[slct] == pY[i])
+				if(slctP != i && pX[slctP] == pX[i] && pY[slctP] == pY[i])
 				{
 					cTest = 1;
 					break;
@@ -131,16 +131,16 @@ int main()
 			switch (moveId)
 			{
 				case 1:
-					pX[slct]--;
+					pX[slctP]--;
 					break;
 				case 2:
-					pX[slct]++;
+					pX[slctP]++;
 					break;
 				case 3:
-					pY[slct]--;
+					pY[slctP]--;
 					break;
 				case 4:
-					pY[slct]++;
+					pY[slctP]++;
 					break;
 			}
 		}
